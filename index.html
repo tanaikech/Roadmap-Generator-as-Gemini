@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h3 class="header center light-blue-text text-darken-1">
+        Roadmap Generator as Gemini
+      </h3>
+    </header>
+    <div class="container">
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <div class="input-field col s12">
+              <label for="apiKey">API key</label>
+              <input
+                type="text"
+                name="apiKey"
+                id="apiKey"
+                class="validate"
+                value="<?!= apiKey ?>"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <p>
+                <label>
+                  <input name="group1" type="radio" onclick="simpleGoal()" />
+                  <span>Simple goal of roadmap</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input
+                    name="group1"
+                    type="radio"
+                    onclick="detailedDescription()"
+                  />
+                  <span>Detailed description of roadmap</span>
+                </label>
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12" id="inputText"></div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <button
+                class="btn icon-right waves-effect waves-light"
+                type="button"
+                name="action"
+                onclick="run()"
+              >
+                Submit
+                <i class="material-icons right">send</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <div id="status"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <div class="progress hide" id="progress">
+                <div class="indeterminate"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-copyright center light-blue-text text-darken-1">
+        ��� 2025 Copyright <a href="https://tanaikech.github.io/">Tanaike</a>
+      </div>
+    </footer>
+
+    <script>
+      function run() {
+        const p = document.getElementById("progress");
+        p.className = "progress";
+        document.getElementById("status").innerHTML = "";
+        const apiKey = document.getElementById("apiKey").value;
+        const goal = document.getElementById("goal");
+        const description = document.getElementById("description");
+        const obj = { apiKey };
+        if (goal) {
+          obj.goal = goal.value;
+        }
+        if (description) {
+          obj.description = description.value;
+        }
+        google.script.run
+          .withSuccessHandler((e) => {
+            p.className = "progress hide";
+            if (e == "Done.") {
+              google.script.host.close();
+            } else {
+              document.getElementById("status").innerHTML = e;
+            }
+          })
+          .doGemini(obj);
+      }
+
+      function simpleGoal() {
+        const div = document.getElementById("inputText");
+        div.innerHTML = `<label for="goal">Goal of roadmap</label><input type="text" name="goal" id="goal" class="validate">`;
+      }
+
+      function detailedDescription() {
+        const div = document.getElementById("inputText");
+        div.innerHTML = `<label for="description">Detaled description of roadmap</label><textarea type="text" name="description" id="description" class="validate" style="height: 200px;"></textarea>`;
+      }
+    </script>
+  </body>
+</html>
