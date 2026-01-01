@@ -1,7 +1,9 @@
 /**
  * Class object for generating roadmap using Gemini API.
  * Author: Kanshi Tanaike
- * version 1.0.0
+ * GitHub https://github.com/tanaikech/Roadmap-Generator-as-Gemini
+ * 
+ * version 1.0.1
  * @class
  */
 class GenerateRoadmap {
@@ -90,18 +92,23 @@ class GenerateRoadmap {
   * @return {GenerateRoadmap}
   */
   generateContent() {
-    const g = new GeminiWithFiles.geminiWithFiles({
+    console.log("Passed3")
+    const g = new GeminiWithFiles({
       apiKey: this.apiKey,
-      model: "models/gemini-2.0-flash-exp",
+      model: model || "models/gemini-3-flash-preview",
       generationConfig: { responseMimeType: "application/json" },
       tools: [{ googleSearch: {} }],
     });
+    console.log("Passed4")
     let res;
     if (this.jsonSchema) {
+      console.log("Passed5a")
       res = g.generateContent({ jsonSchema: this.jsonSchema });
     } else {
+      console.log("Passed5b")
       res = g.generateContent({ q: this.prompt });
     }
+    console.log("Passed6")
     if (!res.times || !Array.isArray(res.times) || res.times.length == 0) {
       throw new Error("Gemini couldn't generate a valid roadmap. Try again.");
     }

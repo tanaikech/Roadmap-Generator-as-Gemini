@@ -171,4 +171,8 @@ Gemini, integrated with Google Apps Script, automated project roadmap creation i
 
   1. Initial release.
 
+- v1.0.1 (January 1, 2026)
+
+  1. The default model was changed `models/gemini-3-flash-preview`.
+
 [TOP](#top)
